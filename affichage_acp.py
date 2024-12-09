@@ -43,7 +43,7 @@ def my_biplot(score=None,coeff=None,coeff_labels=None,score_labels=None,nomx = N
     #fig, ax = plt.subplots()
     plt.contour(X,Y,F,[0])
     p = coeff.shape[0]
-    
+    print (p)
     for i in range(0,p):
         plt.arrow(0, 0, coeff[i,0], coeff[i,1],color = 'r',alpha = 0.5,head_width=0.05, head_length=0.05)
             
@@ -58,5 +58,7 @@ def my_biplot(score=None,coeff=None,coeff_labels=None,score_labels=None,nomx = N
     plt.xlabel(nomx)
     plt.ylabel(nomy)
     plt.grid(linestyle='--')
+    plt.savefig("./resultats/biplot.svg")
+    plt.title("Représentation des élèves et des matières en ACP")
     plt.show()
 
