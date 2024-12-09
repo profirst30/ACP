@@ -146,3 +146,4 @@ from affichage_acp import my_biplot
 my_biplot(score=cc[:, 0:2], coeff=np.transpose(acp.components_[0:2, :]),
           coeff_labels=nomv, score_labels=nomi, nomx="PC1", nomy="PC2")
 # %%
+
