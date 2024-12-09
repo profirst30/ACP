@@ -7,46 +7,71 @@ import matplotlib as mpl
 import matplotlib.cm as cm
 #import seaborn as sns
 
+# creation du dossier resultats s'il n'existe pas
+import os
+if not os.path.exists("resultats"):
+    os.makedirs("resultats")
 
+# %%
 X = np.transpose(pd.read_csv("./notes.csv",sep=";",header=0,index_col=0))
 nomi = list(X.index)
 nomv = list(X.columns)
-print(X)
 print(nomi)
 print(nomv)
+print(X)
 # %%
-#representation de la matiere "français"
-plt.hist(X["fran"], bins=10, alpha=0.5, label='français')
+# francais 
+plt.hist(X["fran"], bins=20, label='français')
 plt.legend(loc='upper right')
+plt.xlabel("Notes")
+plt.ylabel("Effectif")
+plt.savefig("./resultats/histogramme_francais.svg")
+plt.title("Histogramme des notes en français")
 plt.show()
-# %%
-plt.hist(X["lati"], bins=10, alpha=0.5, label='latin')
+
+# latin
+plt.hist(X["lati"], bins=20, label="latin")
 plt.legend(loc='upper right')
+plt.xlabel("Notes")
+plt.ylabel("Effectif")
+plt.savefig("./resultats/histogramme_latin.svg")
+plt.title("Histogramme des notes en latin")
 plt.show()
+
 # %%
-#Afficher les variables "mathematiques" et "français" dans un nuage de points
+
+# Nuage de points des notes en mathématiques en fonction des notes en sciences
+
 for i in range(len(nomi)):
     plt.scatter(X["math"][i], X["scie"][i])
-    plt.text(X["math"][i], X["scie"][i],nomi[i])
-    plt.xlabel("mathematiques")
-    plt.ylabel("sciences")
-    plt.title("mathematiques vs sciences")
+    plt.xlabel("Notes en mathématiques")
+    plt.ylabel("Notes en sciences")
+    plt.text(X["math"][i], X["scie"][i], nomi[i])
+    plt.savefig("./resultats/nuage_de_points_math_sciences.svg")
+    plt.title("Nuage de points des notes en mathématiques et en sciences")
 plt.show()
+    
+# Nuage de points des notes en mathématiques en fonction des notes en dessin
 
-# %%
-#Afficher les variables "mathematiques" et "français" dans un nuage de points
 for i in range(len(nomi)):
     plt.scatter(X["math"][i], X["d-m "][i])
-    plt.text(X["math"][i], X["d-m "][i],nomi[i])
-    plt.xlabel("mathematiques")
-    plt.ylabel("dessins")
-    plt.title("mathematiques vs dessins")
+    plt.xlabel("Notes en mathématiques")
+    plt.ylabel("Notes en dessin")
+    plt.text(X["math"][i], X["d-m "][i], nomi[i])
+    plt.savefig("./resultats/nuage_de_points_math_dessin.svg")
+    plt.title("Nuage de points des notes en mathématiques et en dessin")
 plt.show()
-# %%
-#1.2 Calcul de l’ACP
-#Soit X les donn´ees de dimension p rang´ees dans un tableau de taille n × p. On peut effectuer l’ACP
-#en Python en utilisant, par exemple, la commande PCA de scikit-learn :
 
+
+# graphiquement on remarque que les notes en mathématiques et en sciences semblent corrélées, alors que les notes en mathématiques et en dessin ne semblent pas corrélées.
+
+
+# %%
+# Calcul de l'ACP
 from sklearn.decomposition import PCA
 
+
+p = len(nomv)
+
 acp = PCA(n_components=p)
+cc = acp.fit_transform(X) # cc contient les projections
