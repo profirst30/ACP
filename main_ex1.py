@@ -125,16 +125,25 @@ plt.show()
 scaler = StandardScaler()
 X_std = scaler.fit_transform(X)
 
+var = X.var(axis=0)
+
 correlations = np.zeros((p, p))
 for k in range(p):
     for j in range(p):
-        correlations[k, j] = acp.components_[j, k] * np.sqrt(acp.explained_variance_[j])
+        correlations[k, j] = acp.components_[j, k] * np.sqrt(acp.explained_variance_ratio_[j] / var[j])
 
 print("\nCorrélations entre variables initiales et composantes principales:")
 corr_df = pd.DataFrame(correlations, 
                       columns=[f'CP{i+1}' for i in range(p)],
                       index=nomv)
 print(corr_df)
+# %%
+#Création de la heatmap
+plt.figure(figsize=(10, 6))
+sns.heatmap(correlations, annot=True, cmap='coolwarm', center = 0)
+plt.title("Corrélations entre variables initiales et composantes principales")
+#plt.savefig("./resultats/correlations_heatmap.svg")
+plt.show()
 
 # %%
 # Représentation biplot

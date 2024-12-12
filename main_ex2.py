@@ -99,12 +99,18 @@ plt.show()
 loadings = pca.components_
 
 # Créer un tableau de longueurs d'onde (à ajuster selon vos données)
-wavelengths = np.linspace(400, 2400, img.shape[2])  # exemple pour 220 bandes
+# Définir les points de longueur d'onde en excluant les régions d'absorption de l'eau
+wavelengths = np.linspace(400, 2400, 220)  # Initialiser avec 220 bandes
+mask = np.ones(220, dtype=bool)
+mask[104:109] = False  # Région 104-108
+mask[150:164] = False  # Région 150-163
+mask[219] = False      # Bande 220
+wavelengths1 = wavelengths[mask]
 
 # Visualiser les coefficients des 3 premières composantes
 plt.figure(figsize=(12, 6))
 for i in range(3):
-    plt.plot(wavelengths, loadings[i], label=f'CP{i+1}')
+    plt.plot(wavelengths1, loadings[i], label=f'CP{i+1}')
 plt.xlabel('Longueur d\'onde (nm)')
 plt.ylabel('Coefficient de corrélation')
 plt.title('Signature spectrale des composantes principales')
